@@ -21,16 +21,16 @@ include_once("tateti.php");
 function menu()
 {
     // int $opcionElegida
-    echo "MENU DE OPCIONES";
-    echo "1) Jugar al tateti";
-    echo "2) Mostrar un juego";
-    echo "3) Mostrar el primer juego ganador";
-    echo "4) Mostrar porcentaje de juegos ganados";
-    echo "5) Mostrar resumen del jugador";
-    echo "6) Mostrar listado de juegos ordenado por el jugador O";
-    echo "7) Salir";
-    $opcionElegida = trim(fgets(STDIN));
-    return $opcionElegida;
+    echo "MENU DE OPCIONES"."\n";
+    echo "1) Jugar al tateti"."\n";
+    echo "2) Mostrar un juego"."\n";
+    echo "3) Mostrar el primer juego ganador"."\n";
+    echo "4) Mostrar porcentaje de juegos ganados"."\n";
+    echo "5) Mostrar resumen del jugador"."\n";
+    echo "6) Mostrar listado de juegos ordenado por el jugador O"."\n";
+    echo "7) Salir"."\n";
+    $seleccionarOpcion = trim(fgets(STDIN));
+    return $seleccionarOpcion;
 }
 
 /**
@@ -39,11 +39,17 @@ function menu()
  */
 function mostrarJuego($datosJuego)
 {
-    
+    // int $numJuego
+    echo "Ingrese el numero del juego que desesa visualizar: ";
+    $numJuego = trim(fgets(STDIN));
+    $numJuego = $numJuego - 1;
+    $separador = "**************************************";
+    echo $separador."\n";
+    echo "Juego TATETI: ". $numJuego."\n";
+    echo "Juego X: ".$datosJuego[$numJuego]["jugadorCruz"]." Obtuvo ".$datosJuego[$numJuego]["puntosCruz"]." puntos"."\n";
+    echo "Juego O: ".$datosJuego[$numJuego]["jugadorCirculo"]." Obtuvo ".$datosJuego[$numJuego]["puntosCirculo"]." puntos"."\n";
+    echo $separador."\n"."\n";
 }
-
-
-
 
 
 /**************************************/
@@ -56,16 +62,18 @@ function mostrarJuego($datosJuego)
 //Inicialización de variables:
 $datosJuego = [];
 //Proceso:
-$opcionElegida = menu();
-
-switch ($opcionElegida) {
+$seleccionarOpcion = menu();
+do {
+switch ($seleccionarOpcion) {
     case 1: 
-        
-        $datosJuego[] = jugar();
+        $i = count($datosJuego);
+        $datosJuego[$i] = jugar();
+        $seleccionarOpcion = menu();
         break;
 
     case 2: 
-        //completar qué secuencia de pasos ejecutar si el usuario elige la opción 2
+        mostrarJuego($datosJuego);
+        $seleccionarOpcion = menu();
         break;
 
     case 3: 
@@ -85,10 +93,14 @@ switch ($opcionElegida) {
         //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
         break;
         
-    case 7: 
-        //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
-        break;
+    default: 
+        echo "El numero que ingreso no es valido, por favor ingrese un numero del 1 al 7"."\n"."\n";
+        $seleccionarOpcion = menu();
+    break;
     }
+}while ($seleccionarOpcion < 7);
+exit();
+
 //print_r($juego);
 //imprimirResultado($juego);
 
