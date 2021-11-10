@@ -13,6 +13,84 @@ include_once("tateti.php");
 /***** DEFINICION DE FUNCIONES ********/
 /**************************************/
 
+/*
+    $juego = [
+        "jugadorCruz" => $nombreJugadorCruz,
+        "jugadorCirculo" => $nombreJugadorCirculo,
+        "puntosCruz" => $puntosCruz,
+        "puntosCirculo" => $puntosCirculo
+    ]
+*/
+
+/**
+ * Esta funcion carga ejemplos de juegos 
+ * @return $array
+ */
+function cargarJuego($datosJuego)
+{
+    $datosJuego[0] = [
+        "jugadorCruz" => "Jose",
+        "jugadorCirculo" => "Enrike",
+        "puntosCruz" => 4,
+        "puntosCirculo" => 0
+    ];
+    $datosJuego[1] = [
+        "jugadorCruz" => "Fran",
+        "jugadorCirculo" => "Seba",
+        "puntosCruz" => 6,
+        "puntosCirculo" => 0
+    ];
+    $datosJuego[2] = [
+        "jugadorCruz" => "Tita",
+        "jugadorCirculo" => "Jose",
+        "puntosCruz" => 1,
+        "puntosCirculo" => 1
+    ];
+    $datosJuego[3] = [
+        "jugadorCruz" => "Andrea",
+        "jugadorCirculo" => "Roberto",
+        "puntosCruz" => 0,
+        "puntosCirculo" => 2
+    ];
+    $datosJuego[4] = [
+        "jugadorCruz" => "Jose",
+        "jugadorCirculo" => "Seba",
+        "puntosCruz" => 0,
+        "puntosCirculo" => 5
+    ];
+    $datosJuego[5] = [
+        "jugadorCruz" => "Fran",
+        "jugadorCirculo" => "Enrike",
+        "puntosCruz" => 1,
+        "puntosCirculo" => 1
+    ];
+    $datosJuego[6] = [
+        "jugadorCruz" => "Tita",
+        "jugadorCirculo" => "Roberto",
+        "puntosCruz" => 0,
+        "puntosCirculo" => 6
+    ];
+    $datosJuego[7] = [
+        "jugadorCruz" => "Seba",
+        "jugadorCirculo" => "Enrike",
+        "puntosCruz" => 0,
+        "puntosCirculo" => 2
+    ];
+    $datosJuego[8] = [
+        "jugadorCruz" => "Fran",
+        "jugadorCirculo" => "Jose",
+        "puntosCruz" => 0,
+        "puntosCirculo" => 2
+    ];
+    $datosJuego[9] = [
+        "jugadorCruz" => "Andrea",
+        "jugadorCirculo" => "Tita",
+        "puntosCruz" => 0,
+        "puntosCirculo" => 4
+    ];
+    return $datosJuego;
+}
+
 /**
  * Este modulo muestra por pantalla el Menu y retorna la opcion elegida por el usuario
  * @return int Opcion elegida
@@ -40,12 +118,14 @@ function menu()
 function mostrarJuego($datosJuego)
 {
     // int $numJuego
+    $max = count($datosJuego);
+    $min = 0;
     echo "Ingrese el numero del juego que desesa visualizar: ";
-    $numJuego = trim(fgets(STDIN));
+    $numJuego = solicitarNumeroEntre($min, $max);
     $numJuego = $numJuego - 1;
     $separador = "**************************************";
     echo $separador."\n";
-    echo "Juego TATETI: ". $numJuego."\n";
+    echo "Juego TATETI: ".($numJuego + 1)."\n";
     echo "Juego X: ".$datosJuego[$numJuego]["jugadorCruz"]." Obtuvo ".$datosJuego[$numJuego]["puntosCruz"]." puntos"."\n";
     echo "Juego O: ".$datosJuego[$numJuego]["jugadorCirculo"]." Obtuvo ".$datosJuego[$numJuego]["puntosCirculo"]." puntos"."\n";
     echo $separador."\n"."\n";
@@ -62,12 +142,14 @@ function mostrarJuego($datosJuego)
 //Inicialización de variables:
 $datosJuego = [];
 //Proceso:
+$datosJuego = cargarJuego($datosJuego);
 $seleccionarOpcion = menu();
 do {
 switch ($seleccionarOpcion) {
     case 1: 
         $i = count($datosJuego);
         $datosJuego[$i] = jugar();
+        imprimirResultado($datosJuego[$i]);
         $seleccionarOpcion = menu();
         break;
 
