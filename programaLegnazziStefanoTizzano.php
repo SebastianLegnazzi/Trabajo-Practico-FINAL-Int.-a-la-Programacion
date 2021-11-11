@@ -119,7 +119,7 @@ function mostrarJuego($datosJuego)
 {
     // int $numJuego
     $max = count($datosJuego);
-    $min = 0;
+    $min = 1;
     echo "Ingrese el numero del juego que desesa visualizar: ";
     $numJuego = solicitarNumeroEntre($min, $max);
     $numJuego = $numJuego - 1;
