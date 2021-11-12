@@ -168,24 +168,43 @@ function primerVictoriaJugador($partidasGuardadas)
 //int $i, $dimension
     //string $nombre
     $i=0;
-    $jugadorEncontrado = false;
     $dimension = count($partidasGuardadas);
     echo "Ingrese el nombre del jugador: ";
     $nombre = strtoupper(trim(fgets(STDIN)));
-    while (!$jugadorEncontrado && $dimension > $i ) {
-      if ($nombre == strtoupper($partidasGuardadas[$i]["jugadorCruz"]) && $partidasGuardadas[$i]["puntosCruz"] > 1){
-        $jugadorEncontrado = true;
-      }else if($nombre == strtoupper($partidasGuardadas[$i]["jugadorCirculo"]) && $partidasGuardadas[$i]["puntosCirculo"] > 1){
-        $jugadorEncontrado = true;
-      }
-      $i = $i + 1;
-    }
-    if($jugadorEncontrado) {
-    estadisticasPartida ($partidasGuardadas, $i);
+    $ganador = retornaIndiceGanador($nombre, $partidasGuardadas);
+    if($ganador > -1) {
+    estadisticasPartida ($partidasGuardadas, $ganador);
     }else{
         echo "\n"."El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";
     }
 }
+
+/**
+ * Retorna el indice de la primer victoria segun el nombre ingresado
+ * @param string $jugador
+ * @param array $coleccion
+ */
+function retornaIndiceGanador($jugador, $coleccion)
+{
+//int $i, $dimension
+    //int $indiceGanador
+    $i=0;
+    $jugadorEncontrado = false;
+    $indiceGanador = -1;
+    $dimension = count($coleccion);
+    while (!$jugadorEncontrado && $dimension > $i ) {
+      if ($jugador == strtoupper($coleccion[$i]["jugadorCruz"]) && $coleccion[$i]["puntosCruz"] > 1){
+        $jugadorEncontrado = true;
+        $indiceGanador = $i+1;
+      }else if($jugador == strtoupper($coleccion[$i]["jugadorCirculo"]) && $coleccion[$i]["puntosCirculo"] > 1){
+        $jugadorEncontrado = true;
+        $indiceGanador = $i+1;
+      }
+      $i = $i + 1;
+    }
+    return $indiceGanador;
+}
+
 
 /**
  * Toma el array de juegos y le agrega los nuevos juegos
@@ -193,7 +212,7 @@ function primerVictoriaJugador($partidasGuardadas)
  * @param array $nuevoJuego
  * @return array $coleccionJuegos
  */
-function agregarJuego ($coleccionJuegos, $nuevoJuego)
+function agregarJuego($coleccionJuegos, $nuevoJuego)
 {
     // int $dimension
     $dimension = count($coleccionJuegos);
@@ -213,7 +232,6 @@ function ganadosSimboloElegido($datosJuego)
 
 
 //Inicialización de variables:
-$partidasActualizadas = [];
 $partidaNueva = [];
 $datosJuego = [];
 //Proceso:
@@ -225,26 +243,26 @@ switch ($menu) {
     case 1: 
         $partidaNueva = jugar();
         imprimirResultado($partidaNueva);
-        $partidasActualizadas = agregarJuego($datosJuego, $partidaNueva);
+        $datosJuego = agregarJuego($datosJuego, $partidaNueva);
         $menu = seleccionarOpcion();
         break;
 
 
     case 2: 
-        mostrarJuego($partidasActualizadas);
+        mostrarJuego($datosJuego);
         $menu = seleccionarOpcion();
         break;
 
 
     case 3: 
-        primerVictoriaJugador($partidasActualizadas);
+        primerVictoriaJugador($datosJuego);
         $menu = seleccionarOpcion();
         break;
 
         
     case 4: 
         //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
-        ganadosSimboloElegido($partidasActualizadas);
+        ganadosSimboloElegido($datosJuego);
         $menu = seleccionarOpcion();
         break;
        
