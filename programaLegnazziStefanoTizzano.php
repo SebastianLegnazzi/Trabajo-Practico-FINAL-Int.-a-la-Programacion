@@ -90,11 +90,11 @@ function cargarJuego($partidasCargadas)
 
 /**
  * Este módulo muestra por pantalla el menú y retorna la opción elegida por el usuario
- * @return int $seleccionarOpcion
+ * @return int $menu
  */
-function menu()
+function seleccionarOpcion()
 {
-    // int $seleccionarOpcion
+    // int $menu
     echo "MENU DE OPCIONES"."\n";
     echo "1) Jugar al tateti"."\n";
     echo "2) Mostrar un juego"."\n";
@@ -103,8 +103,8 @@ function menu()
     echo "5) Mostrar resumen del jugador"."\n";
     echo "6) Mostrar listado de juegos ordenado por el jugador O"."\n";
     echo "7) Salir"."\n";
-    $seleccionarOpcion = trim(fgets(STDIN));
-    return $seleccionarOpcion;
+    $menu = trim(fgets(STDIN));
+    return $menu;
 }
 
 /**
@@ -188,25 +188,19 @@ function primerVictoriaJugador($partidasGuardadas){
 
 
 function ganadosSimboloElegido($datosJuego){
-    
+
 }
 
 /**************************************/
 /*********** PROGRAMA PRINCIPAL *******/
 /**************************************/
-// Abre un menu de opciones para que el usuario pueda elegir
-//Declaración de variables:
-/*
-* array $datosJuego
-* int $seleccionarOpcion
-* 
-*/
+
 
 //Inicialización de variables:
 $datosJuego = [];
 //Proceso:
 $datosJuego = cargarJuego($datosJuego);
-$seleccionarOpcion = menu();
+$menu = seleccionarOpcion();
 do {
 switch ($seleccionarOpcion) {
     
@@ -220,20 +214,20 @@ switch ($seleccionarOpcion) {
 
     case 2: 
         mostrarJuego($datosJuego);
-        $seleccionarOpcion = menu();
+        $menu = seleccionarOpcion();
         break;
 
 
     case 3: 
         primerVictoriaJugador($datosJuego);
-        $seleccionarOpcion = menu();
+        $menu = seleccionarOpcion();
         break;
 
         
     case 4: 
         //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
         ganadosSimboloElegido($datosJuego);
-        $seleccionarOpcion = menu();
+        $menu = seleccionarOpcion();
         break;
        
         
