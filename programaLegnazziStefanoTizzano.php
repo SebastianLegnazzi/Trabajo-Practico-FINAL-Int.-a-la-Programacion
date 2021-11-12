@@ -202,13 +202,13 @@ $datosJuego = [];
 $datosJuego = cargarJuego($datosJuego);
 $menu = seleccionarOpcion();
 do {
-switch ($seleccionarOpcion) {
+switch ($menu) {
     
     case 1: 
         $i = count($datosJuego);
         $datosJuego[$i] = jugar();
         imprimirResultado($datosJuego[$i]);
-        $seleccionarOpcion = menu();
+        $menu = seleccionarOpcion();
         break;
 
 
