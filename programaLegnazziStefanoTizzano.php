@@ -185,7 +185,11 @@ function primerVictoriaJugador($partidasGuardadas){
         echo "\n"."El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";
     }
 }
-       
+
+
+function ganadosSimboloElegido($datosJuego){
+    
+}
 
 /**************************************/
 /*********** PROGRAMA PRINCIPAL *******/
@@ -228,6 +232,8 @@ switch ($seleccionarOpcion) {
         
     case 4: 
         //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
+        ganadosSimboloElegido($datosJuego);
+        $seleccionarOpcion = menu();
         break;
        
         
