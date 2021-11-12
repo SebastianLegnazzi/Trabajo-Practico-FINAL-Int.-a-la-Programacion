@@ -185,27 +185,6 @@ function primerVictoriaJugador($partidasGuardadas){
         echo "\n"."El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";
     }
 }
-    
-/*function primerVictoriaJugador($arrayTateti){
-    //int $i, $dimension
-    //string $nombre
-    $i=0;
-    $dimension = count($arrayTateti);
-    echo "Ingrese el nombre del jugador: ";
-    $nombre = trim(fgets(STDIN));
-    do {
-        $result = resultadoJuego($arrayTateti, ($i+1));
-        if ($nombre <> $arrayTateti[$i]["jugadorCruz"] || $nombre <> $arrayTateti[$i]["jugadorCirculo"] && $dimension < $i ){
-            $i= $i+1; 
-        }
-    }while ($result <> "Ganó: " . CIRCULO || $result <> "Ganó: " . CRUZ);
-    if ($nombre == $arrayTateti[$i]["jugadorCruz"] || $nombre == $arrayTateti[$i]["jugadorCirculo"]){   
-        estadisticasPartida ($arrayTateti, $i);
-    } else {
-        echo "El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";
-    }
-} */
-
        
 
 /**************************************/
