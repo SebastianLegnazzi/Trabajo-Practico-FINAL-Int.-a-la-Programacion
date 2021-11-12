@@ -163,7 +163,8 @@ function mostrarJuego($datos)
  * Este módulo muestra la primer victoria del jugador que lo solicita. Si no tiene muestra que no ganó
  * @param array $partidasGuardadas
  */
-function primerVictoriaJugador($partidasGuardadas){
+function primerVictoriaJugador($partidasGuardadas)
+{
 //int $i, $dimension
     //string $nombre
     $i=0;
@@ -186,8 +187,23 @@ function primerVictoriaJugador($partidasGuardadas){
     }
 }
 
+/**
+ * Toma el array de juegos y le agrega los nuevos juegos
+ * @param array $coleccionJuegos
+ * @param array $nuevoJuego
+ * @return array $coleccionJuegos
+ */
+function agregarJuego ($coleccionJuegos, $nuevoJuego)
+{
+    // int $dimension
+    $dimension = count($coleccionJuegos);
+    $coleccionJuegos[$dimension]=$nuevoJuego;
+    return $coleccionJuegos;
+}
 
-function ganadosSimboloElegido($datosJuego){
+
+function ganadosSimboloElegido($datosJuego)
+{
 
 }
 
@@ -197,6 +213,8 @@ function ganadosSimboloElegido($datosJuego){
 
 
 //Inicialización de variables:
+$partidasActualizadas = [];
+$partidaNueva = [];
 $datosJuego = [];
 //Proceso:
 $datosJuego = cargarJuego($datosJuego);
@@ -205,28 +223,28 @@ do {
 switch ($menu) {
     
     case 1: 
-        $i = count($datosJuego);
-        $datosJuego[$i] = jugar();
-        imprimirResultado($datosJuego[$i]);
+        $partidaNueva = jugar();
+        imprimirResultado($partidaNueva);
+        $partidasActualizadas = agregarJuego($datosJuego, $partidaNueva);
         $menu = seleccionarOpcion();
         break;
 
 
     case 2: 
-        mostrarJuego($datosJuego);
+        mostrarJuego($partidasActualizadas);
         $menu = seleccionarOpcion();
         break;
 
 
     case 3: 
-        primerVictoriaJugador($datosJuego);
+        primerVictoriaJugador($partidasActualizadas);
         $menu = seleccionarOpcion();
         break;
 
         
     case 4: 
         //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
-        ganadosSimboloElegido($datosJuego);
+        ganadosSimboloElegido($partidasActualizadas);
         $menu = seleccionarOpcion();
         break;
        
@@ -243,10 +261,10 @@ switch ($menu) {
 
     default: 
         echo "El numero que ingreso no es valido, por favor ingrese un numero del 1 al 7"."\n"."\n";
-        $seleccionarOpcion = menu();
+        $menu = seleccionarOpcion();
     break;
     }
-} while ($seleccionarOpcion < 7);
+} while ($menu < 7);
 exit();
 
 //print_r($juego);
