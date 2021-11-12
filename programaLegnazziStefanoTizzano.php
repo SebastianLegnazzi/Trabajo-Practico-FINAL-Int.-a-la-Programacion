@@ -167,38 +167,23 @@ function primerVictoriaJugador($partidasGuardadas){
 //int $i, $dimension
     //string $nombre
     $i=0;
+    $jugadorEncontrado = false;
     $dimension = count($partidasGuardadas);
     echo "Ingrese el nombre del jugador: ";
-    $nombre = trim(fgets(STDIN));
-    while ($nombre <> $partidasGuardadas[$i]["jugadorCruz"] || $nombre <> $partidasGuardadas[$i]["jugadorCirculo"] && $dimension > $i ) {
-        if ($nombre == $partidasGuardadas[$i]["jugadorCruz"]){
-            $puntos = $partidasGuardadas [$i]["puntosCruz"];
-            if ($puntos < 2){
-                $i = $i+1;
-                if ($dimension == $i){
-                    break;
-                }
-            } else {
-                estadisticasPartida($partidasGuardadas, $i+1);
-                break;
-            }
-        } elseif ($nombre == $partidasGuardadas[$i]["jugadorCirculo"]){
-            $puntos = $partidasGuardadas [$i]["puntosCirculo"];
-            if ($puntos < 2){
-                $i = $i+1;
-                if ($dimension == $i){
-                    break;
-                } 
-            } else {
-                estadisticasPartida($partidasGuardadas, $i+1);
-                break;
-            }
-        } else {
-            $i= $i+1;
-        }
+    $nombre = strtoupper(trim(fgets(STDIN)));
+    while (!$jugadorEncontrado && $dimension > $i ) {
+      if ($nombre == strtoupper($partidasGuardadas[$i]["jugadorCruz"]) && $partidasGuardadas[$i]["puntosCruz"] > 1){
+        $jugadorEncontrado = true;
+      }else if($nombre == strtoupper($partidasGuardadas[$i]["jugadorCirculo"]) && $partidasGuardadas[$i]["puntosCirculo"] > 1){
+        $jugadorEncontrado = true;
+      }
+      $i = $i + 1;
     }
-    if ($puntos < 2){
-        echo "\n"."El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";}
+    if($jugadorEncontrado) {
+    estadisticasPartida ($partidasGuardadas, $i);
+    }else{
+        echo "\n"."El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";
+    }
 }
     
 /*function primerVictoriaJugador($arrayTateti){
