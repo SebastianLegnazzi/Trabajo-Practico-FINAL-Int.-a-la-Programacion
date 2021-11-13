@@ -175,7 +175,7 @@ function primerVictoriaJugador($partidasGuardadas)
     if($ganador > -1) {
     estadisticasPartida ($partidasGuardadas, $ganador);
     }else{
-        echo "\n"."El jugador ". $nombre. " no ganó ningun juego"."\n"."\n";
+        echo "\n"."El jugador ". strtolower($nombre). " no ganó ningun juego"."\n"."\n";
     }
 }
 
@@ -205,6 +205,17 @@ function retornaIndiceGanador($jugador, $coleccion)
     return $indiceGanador;
 }
 
+/**
+ * Verifica si el simbolo es X o O, sino verifica que ingrese esos.
+ * @return string $resultado
+ */
+function eligeSimbolo()
+{
+//string $simbolo
+    echo "Ingrese un simbolo X o O";
+    $simbolo = trim(fgtes(STDIN));
+    return $indiceGanador;
+}
 
 /**
  * Toma el array de juegos y le agrega los nuevos juegos
@@ -223,7 +234,7 @@ function agregarJuego($coleccionJuegos, $nuevoJuego)
 
 function ganadosSimboloElegido($datosJuego)
 {
-
+    
 }
 
 /**************************************/
