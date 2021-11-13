@@ -212,9 +212,13 @@ function retornaIndiceGanador($jugador, $coleccion)
 function eligeSimbolo()
 {
 //string $simbolo
-    echo "Ingrese un simbolo X o O";
-    $simbolo = trim(fgtes(STDIN));
-    return $indiceGanador;
+echo "Ingrese un símbolo X o O"."\n";
+$simbolo = strtoupper(trim(fgets(STDIN)));
+    while ($simbolo <> CRUZ && $simbolo <> CIRCULO){
+        echo "El símbolo ".$simbolo. " no está permitido, por favor ingrese X ó O"."\n";
+        $simbolo = strtoupper(trim(fgets(STDIN)));
+    } 
+    return $simbolo;  
 }
 
 /**
@@ -232,10 +236,55 @@ function agregarJuego($coleccionJuegos, $nuevoJuego)
 }
 
 
-function ganadosSimboloElegido($datosJuego)
+/**
+ * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
+ * @param array $historialJuegos
+ * @return array 
+ */
+function ganadoSimboloElegido($historialJuegos)
 {
-    
+    $acumVicTot = 0;
+    $simboloElegido = eligeSimbolo ();
+    foreach ($historialJuegos as $partidaGuard){
+        foreach ($partidaGuard as $clave => $datos){
+            if ("puntosCruz" == $clave || "puntosCirculo" == $clave && $datos > 1){
+                $acumVicTot = $acumVicTot +1;
+            }
+        }
+    }
+    if ($simboloElegido == CRUZ) { 
+        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+        echo $acumVicTot;
+    }else {
+        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+    }
 }
+
+
+/**
+ * El jugador elige el símbolo y retorna la cantidad de victorias del mismo
+ * @param array $totPartidas
+ * @param string $simbolo
+ * @return int $acumVictorias
+ */
+function ganadoSimbolo ($totPartidas, $simbolo)
+{   
+    // String $ptoSimbolos
+    $acumVictorias = 0;
+    if ($simbolo == CRUZ){
+        $ptoSimbolos = "puntosCruz";
+    }else {
+        $ptoSimbolos = "puntosCirculo";
+    }
+    foreach ($totPartidas as $partidaGuard){
+        foreach ($partidaGuard as $clave => $datos)
+        if ($ptoSimbolos == $clave && $datos > 1){
+            $acumVictorias = $acumVictorias +1;            
+        }
+    } 
+    return $acumVictorias;    
+}
+
 
 /**************************************/
 /*********** PROGRAMA PRINCIPAL *******/
@@ -249,7 +298,7 @@ $datosJuego = [];
 $datosJuego = cargarJuego($datosJuego);
 $menu = seleccionarOpcion();
 do {
-switch ($menu) {
+switch ($menu) { //según lo visto en clase, switch es una instrucción de estructura de control alternativa, ya que, es similar a la instrucción IF
     
     case 1: 
         $partidaNueva = jugar();
@@ -272,8 +321,7 @@ switch ($menu) {
 
         
     case 4: 
-        //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
-        ganadosSimboloElegido($datosJuego);
+        ganadoSimboloElegido($datosJuego);
         $menu = seleccionarOpcion();
         break;
        
