@@ -206,13 +206,13 @@ function retornaIndiceGanador($jugador, $coleccion)
 }
 
 /**
- * Verifica si el simbolo es X o O, sino verifica que ingrese esos.
- * @return string $resultado
+ * Verifica si el símbolo ingresado es X ó O.
+ * @return string $simbolo
  */
 function eligeSimbolo()
 {
 //string $simbolo
-echo "Ingrese un símbolo X o O"."\n";
+echo "Ingrese un símbolo X ó O"."\n";
 $simbolo = strtoupper(trim(fgets(STDIN)));
     while ($simbolo <> CRUZ && $simbolo <> CIRCULO){
         echo "El símbolo ".$simbolo. " no está permitido, por favor ingrese X ó O"."\n";
@@ -239,24 +239,27 @@ function agregarJuego($coleccionJuegos, $nuevoJuego)
 /**
  * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
  * @param array $historialJuegos
- * @return array 
  */
 function ganadoSimboloElegido($historialJuegos)
 {
+    //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, string $clave, $simboloElegido
     $acumVicTot = 0;
     $simboloElegido = eligeSimbolo ();
     foreach ($historialJuegos as $partidaGuard){
         foreach ($partidaGuard as $clave => $datos){
-            if ("puntosCruz" == $clave || "puntosCirculo" == $clave && $datos > 1){
+            if (("puntosCruz" == $clave || "puntosCirculo" == $clave)&&($datos > 1)){
                 $acumVicTot = $acumVicTot +1;
             }
         }
     }
     if ($simboloElegido == CRUZ) { 
         $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
-        echo $acumVicTot;
+        $porcentaje = ($victorias * 100) /$acumVicTot;
+        echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n"."\n";
     }else {
         $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+        $porcentaje = ($victorias * 100) /$acumVicTot;
+        echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n"."\n";
     }
 }
 
@@ -269,7 +272,7 @@ function ganadoSimboloElegido($historialJuegos)
  */
 function ganadoSimbolo ($totPartidas, $simbolo)
 {   
-    // String $ptoSimbolos
+    // String $ptoSimbolos, $clave, int $datos, $acumVictorias, array $partidaGuard
     $acumVictorias = 0;
     if ($simbolo == CRUZ){
         $ptoSimbolos = "puntosCruz";
@@ -337,7 +340,7 @@ switch ($menu) { //según lo visto en clase, switch es una instrucción de estru
         
 
     default: 
-        echo "El numero que ingreso no es valido, por favor ingrese un numero del 1 al 7"."\n"."\n";
+        echo "El número que ingreso no es valido, por favor ingrese un número del 1 al 7"."\n"."\n";
         $menu = seleccionarOpcion();
     break;
     }
