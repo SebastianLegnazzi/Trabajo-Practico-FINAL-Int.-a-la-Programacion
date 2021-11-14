@@ -121,7 +121,7 @@ function resultadoJuego($arrayPartida, $numeroPartida)
     } else {
         $resultado = "Empate";
     }
-return $resultado;
+    return $resultado;
 }
      
 
@@ -153,7 +153,7 @@ function mostrarJuego($datos)
     // int $numJuego, $max, $min, $numJuego
     $max = count($datos);
     $min = 1;
-    echo "Ingrese el numero del juego que desesa visualizar: ";
+    echo "Ingrese el número del juego que desea visualizar: ";
     $numJuego = solicitarNumeroEntre($min, $max);
     estadisticasPartida ($datos, $numJuego);
 }
@@ -175,12 +175,12 @@ function primerVictoriaJugador($partidasGuardadas)
     if($ganador > -1) {
     estadisticasPartida ($partidasGuardadas, $ganador);
     }else{
-        echo "\n"."El jugador ". strtolower($nombre). " no ganó ningun juego"."\n"."\n";
+        echo "\n"."El jugador ". strtolower($nombre). " no ganó ningún juego"."\n"."\n";
     }
 }
 
 /**
- * Retorna el indice de la primer victoria segun el nombre ingresado
+ * Retorna el índice de la primer victoria según el nombre ingresado
  * @param string $jugador
  * @param array $coleccion
  */
@@ -211,9 +211,9 @@ function retornaIndiceGanador($jugador, $coleccion)
  */
 function eligeSimbolo()
 {
-//string $simbolo
-echo "Ingrese un símbolo X ó O"."\n";
-$simbolo = strtoupper(trim(fgets(STDIN)));
+    //string $simbolo
+    echo "Ingrese un símbolo X ó O"."\n";
+    $simbolo = strtoupper(trim(fgets(STDIN)));
     while ($simbolo <> CRUZ && $simbolo <> CIRCULO){
         echo "El símbolo ".$simbolo. " no está permitido, por favor ingrese X ó O"."\n";
         $simbolo = strtoupper(trim(fgets(STDIN)));
@@ -237,28 +237,41 @@ function agregarJuego($coleccionJuegos, $nuevoJuego)
 
 
 /**
+ * Le ingresa el array de las partidas guardadas y retorna la cantidad de victorias
+ * @param array $partidasGral
+ * @return int $acumPartGanadas 
+ */
+function partidasGanadas($partidasGral)
+{
+    //int $acumPartGanadas, $datos, array $partidaGuard, string $clave
+    $acumPartGanadas = 0;
+    foreach ($partidasGral as $partidaGuard){
+        foreach ($partidaGuard as $clave => $datos){
+            if (("puntosCruz" == $clave || "puntosCirculo" == $clave)&&($datos > 1)){
+                $acumPartGanadas = $acumPartGanadas +1;
+            }
+        }
+    }
+    return $acumPartGanadas;
+}
+
+
+/**
  * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
  * @param array $historialJuegos
  */
 function ganadoSimboloElegido($historialJuegos)
 {
     //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, string $clave, $simboloElegido
-    $acumVicTot = 0;
     $simboloElegido = eligeSimbolo ();
-    foreach ($historialJuegos as $partidaGuard){
-        foreach ($partidaGuard as $clave => $datos){
-            if (("puntosCruz" == $clave || "puntosCirculo" == $clave)&&($datos > 1)){
-                $acumVicTot = $acumVicTot +1;
-            }
-        }
-    }
+    $totVictorias = partidasGanadas ($historialJuegos);
     if ($simboloElegido == CRUZ) { 
         $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
-        $porcentaje = ($victorias * 100) /$acumVicTot;
+        $porcentaje = ($victorias * 100) /$totVictorias;
         echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n"."\n";
     }else {
         $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
-        $porcentaje = ($victorias * 100) /$acumVicTot;
+        $porcentaje = ($victorias * 100) /$totVictorias;
         echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n"."\n";
     }
 }
@@ -286,6 +299,47 @@ function ganadoSimbolo ($totPartidas, $simbolo)
         }
     } 
     return $acumVictorias;    
+}
+/**
+ * 
+ * @param array $listaJuegos
+ */
+function resumenJugador($listaJuegos)
+{
+    //string $simbolo
+    $acumGanados = 0;
+    $acumPerdidos = 0;
+    $acumEmpatados = 0;
+    $acumPtos = 0;
+    echo "Ingrese su nombre"."\n";
+    $nombre = strtoupper(trim(fgets(STDIN)));
+    $infoJugador = ["nombre"=>" ",
+                    "juegosGanados"=> 0,
+                    "juegosPerdidos"=> 0,
+                    "juegosEmpatados"=> 0,
+                    "puntosAcumulados"=>0];
+    foreach ($listaJuegos as $partida){  //en listaJuegos busca el indice cero y guarda todos los datos de la partida
+        foreach ($partida as $clave => $datos){ //por cada clave guarda el nombre de esa clave y el dato que esta asociado 
+            if ($nombre == strtoupper($datos)){ // function resultadoJuego($arrayPartida, $numeroPartida)
+                $cruzOCirculo = $clave;                
+                if ($cruzOCirculo == $partida ["jugadorCruz"] && $partida ["puntosCruz"] >1){
+                    $acumGanados= $acumGanados +1;
+                    $acumPtos = $acumPtos + $partida ["puntosCruz"];
+                }elseif ($cruzOCirculo == $partida ["jugadorCruz"] && $partida ["puntosCruz"] ==1){
+                    $acumEmpatados = $acumEmpatados +1;
+                    $acumPtos = $acumPtos + $partida ["puntosCruz"];
+                }elseif ($cruzOCirculo == $partida ["jugadorCirculo"] && $partida ["puntosCirculo"] >1){
+                    $acumGanados= $acumGanados +1;
+                    $acumPtos = $acumPtos + $partida ["puntosCirculo"];
+                }elseif ($cruzOCirculo == $partida ["jugadorCirculo"] && $partida ["puntosCirculo"] ==1){
+                    $acumEmpatados = $acumEmpatados +1;
+                    $acumPtos = $acumPtos + $partida ["puntosCirculo"];
+                }else{
+                    $acumPerdidos = $acumPerdidos +1;
+                }
+            }
+        }
+    }
 }
 
 
@@ -330,12 +384,12 @@ switch ($menu) { //según lo visto en clase, switch es una instrucción de estru
        
         
     case 5: 
-        //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
+        //Completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
         break;
         
 
     case 6: 
-        //completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
+        //Completar qué secuencia de pasos ejecutar si el usuario elige la opción 3
         break;
         
 
