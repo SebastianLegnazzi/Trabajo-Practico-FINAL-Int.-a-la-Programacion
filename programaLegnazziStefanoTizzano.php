@@ -20,7 +20,7 @@ include_once("tateti.php");
 
 /**
  * Este módulo muestra por pantalla el menú y retorna la opción elegida por el usuario
- * @return int $menu
+ * @return int 
  */
 function seleccionarOpcion()
 {
@@ -186,10 +186,11 @@ function listaOrdCirc($listaJuegos)                 //Punto 6 del menu
 /**
  * Esta función carga ejemplos de juegos 
  * @param array $partidasCargadas
- * @return array $partidasCargadas
+ * @return array 
  */
 function cargarJuego($partidasCargadas)
 {
+    //array $partidasCargadas
     $partidasCargadas[0] = [
         "jugadorCruz" => "Jose",
         "jugadorCirculo" => "Enrike",
@@ -258,7 +259,7 @@ function cargarJuego($partidasCargadas)
  * Este módulo recibe como entrada las partidas guardadas y el número de partida y retorna si ganó CÍRCULO/CRUZ o si empataron.
  * @param array $arrayPartida
  * @param int $numeroPartida
- * @return string $resultado
+ * @return string
  */
 function resultadoJuego($arrayPartida, $numeroPartida)
 {
@@ -298,7 +299,7 @@ function estadisticasPartida($partida, $numPartida)
  * Retorna el índice de la primer victoria según el nombre ingresado
  * @param string $jugador
  * @param array $coleccion
- * @return int $indiceGanador
+ * @return int
  */
 function retornaIndiceGanador($jugador, $coleccion)
 {
@@ -323,7 +324,7 @@ function retornaIndiceGanador($jugador, $coleccion)
 
 /**
  * Verifica si el símbolo ingresado es X ó O.
- * @return string $simbolo
+ * @return string
  */
 function eligeSimbolo()
 {
@@ -342,11 +343,11 @@ function eligeSimbolo()
  * Toma el array de juegos y le agrega los nuevos juegos
  * @param array $coleccionJuegos
  * @param array $nuevoJuego
- * @return array $coleccionJuegos
+ * @return array
  */
 function agregarJuego($coleccionJuegos, $nuevoJuego)
 {
-    // int $dimension
+    // int $dimension, array $coleccionJuegos
     $dimension = count($coleccionJuegos);
     $coleccionJuegos[$dimension] = $nuevoJuego;
     return $coleccionJuegos;
@@ -356,7 +357,7 @@ function agregarJuego($coleccionJuegos, $nuevoJuego)
 /**
  * Le ingresa el array de las partidas guardadas y retorna la cantidad de victorias
  * @param array $partidasGral
- * @return int $acumPartGanadas 
+ * @return int 
  */
 function partidasGanadas($partidasGral)
 {
@@ -377,7 +378,7 @@ function partidasGanadas($partidasGral)
  * El jugador elige el símbolo y retorna la cantidad de victorias del mismo
  * @param array $totPartidas
  * @param string $simbolo
- * @return int $acumVictorias
+ * @return int
  */
 function ganadoSimbolo ($totPartidas, $simbolo)
 {   
@@ -402,10 +403,11 @@ function ganadoSimbolo ($totPartidas, $simbolo)
  * Ordena el array por nombre de jugador cuyo símbolo es O
  * @param array $a
  * @param array $b
- * @return array strcmp($a["jugadorCruz"], $b["jugadorCruz"])
+ * @return array 
  */
 function ordenarJugador($a, $b)
 {
+    //array strcmp($a["jugadorCruz"], $b["jugadorCruz"])
     return strcmp($a["jugadorCirculo"], $b["jugadorCirculo"]);
 }
 
