@@ -80,7 +80,7 @@ function primerVictoriaJugador($partidasGuardadas)  //Punto 3 del menu
  * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
  * @param array $historialJuegos
  */
-function ganadoSimboloElegido($historialJuegos)     //Punto 4 del menu
+function ganadoSimboloElegido($historialJuegos)     //Punto 4 del menú
 {
     //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, $totVictorias, string $clave, $simboloElegido
     $simboloElegido = eligeSimbolo ();
@@ -101,7 +101,7 @@ function ganadoSimboloElegido($historialJuegos)     //Punto 4 del menu
  * Muestra el resumen de las partidas del jugador ingresado
  * @param array $listaJuegos
  */
-function resumenJugador($listaJuegos)               //Punto 5 del menu
+function resumenJugador($listaJuegos)               //Punto 5 del menú
 {
     //int $acumGanados, $acumPerdidos, $acumEmpatados, $acumPtos, $datos
     //bool $encontro, array $infoJugador, $partida, string $simbolo, $cruzOCirculo, $nombre, $clave, $separador
@@ -119,32 +119,32 @@ function resumenJugador($listaJuegos)               //Punto 5 del menu
                     "juegosEmpatados"=> 0,
                     "puntosAcumulados"=>0];
     do{
-        foreach ($listaJuegos as $partida){         //En listaJuegos busca el indice cero y guarda todos los datos de la partida
-            foreach ($partida as $clave => $datos){ //Por cada clave guarda el nombre de esa clave y el dato que esta asociado 
+        foreach ($listaJuegos as $partida){         //En listaJuegos busca el índice cero y guarda todos los datos de la partida
+            foreach ($partida as $clave => $datos){ //Por cada clave guarda el nombre de esa clave y el dato que está asociado 
                 if (strtoupper($nombre) == strtoupper($datos)){ //Revisa si el nombre de la partida coincide al ingresado
                     $cruzOCirculo = $clave;         //Guarda si es X ó O
-                    $encontro = true;               //Guarda si encontro al menos 1 partida
+                    $encontro = true;               //Guarda si encontró al menos 1 partida
                 }            
-                if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos > 1){            //Consulta si jugo como X ó O, y si gano
+                if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos > 1){            //Consulta si jugó como X ó O, y si ganó
                     $acumGanados= $acumGanados +1;
                     $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 1){ //Consulta si jugo como X ó O, y si empato
+                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 1){ //Consulta si jugó como X ó O, y si empató
                         $acumEmpatados = $acumEmpatados +1;
                         $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 0){ //Consulta si jugo como X ó O, y si perdió
+                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 0){ //Consulta si jugó como X ó O, y si perdió
                         $acumPerdidos = $acumPerdidos +1;
                     }
-                if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos > 1){      //Consulta si jugo como X ó O, y si gano
+                if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos > 1){      //Consulta si jugó como X ó O, y si ganó
                     $acumGanados= $acumGanados +1;
                     $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 1){   //Consulta si jugo como X ó O, y si empato
+                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 1){   //Consulta si jugó como X ó O, y si empató
                         $acumEmpatados = $acumEmpatados +1;
                         $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 0){   //Consulta si jugo como X ó O, y si perdió
+                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 0){   //Consulta si jugó como X ó O, y si perdió
                         $acumPerdidos = $acumPerdidos +1;
                 }
             }
-            $cruzOCirculo = "";     //Borra si fue cruz o circulo para seguir buscando en la siguiente partida y que no se genere un bucle
+            $cruzOCirculo = "";     //Borra si fue cruz o círculo para seguir buscando en la siguiente partida y que no se genere un bucle
         }
     if(!$encontro){                 //Si no encuentra el jugador, vuelve a pedir otro nombre
         echo "\n"."El jugador ingresado no jugó nunca, por favor ingrese otro nombre"."\n";
