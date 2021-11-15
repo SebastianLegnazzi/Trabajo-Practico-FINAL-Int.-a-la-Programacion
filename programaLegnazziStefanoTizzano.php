@@ -14,7 +14,172 @@ include_once("tateti.php");
 
 
 /**************************************/
-/***** DEFINICION DE FUNCIONES ********/
+/*****  FUNCIONES PRINCIPALES  ********/
+/**************************************/
+
+
+/**
+ * Este módulo muestra por pantalla el menú y retorna la opción elegida por el usuario
+ * @return int $menu
+ */
+function seleccionarOpcion()
+{
+    // int $menu
+    echo "\n"."MENU DE OPCIONES"."\n";
+    echo "1) Jugar al tateti"."\n";
+    echo "2) Mostrar un juego"."\n";
+    echo "3) Mostrar el primer juego ganado del jugador"."\n";
+    echo "4) Mostrar porcentaje de juegos ganados"."\n";
+    echo "5) Mostrar resumen del jugador"."\n";
+    echo "6) Mostrar listado de juegos ordenado por el jugador O"."\n";
+    echo "7) Salir"."\n";
+    echo "Opcion: ";
+    $menu = trim(fgets(STDIN));
+    echo "\n";
+    return $menu;
+}
+
+
+/**
+ * Este módulo solicita un número y muestra por pantalla los datos del juego
+ * @param array $datos
+ */
+function mostrarJuego($datos)                       //Punto 2 del menu
+{
+    // int $numJuego, $max, $min, $numJuego
+    $max = count($datos);
+    $min = 1;
+    echo "Ingrese el número del juego que desea visualizar: ";
+    $numJuego = solicitarNumeroEntre($min, $max);
+    estadisticasPartida ($datos, $numJuego);
+}
+
+
+/**
+ * Éste módulo muestra la primer victoria del jugador que lo solicita. Si no tiene muestra que no ganó
+ * @param array $partidasGuardadas
+ */
+function primerVictoriaJugador($partidasGuardadas)  //Punto 3 del menu
+{
+//int $i, $dimension
+    //string $nombre, int $ganador
+    $i=0;
+    $dimension = count($partidasGuardadas);
+    echo "Ingrese el nombre del jugador: ";
+    $nombre = strtoupper(trim(fgets(STDIN)));
+    $ganador = retornaIndiceGanador($nombre, $partidasGuardadas);
+    if($ganador > -1) {
+    estadisticasPartida ($partidasGuardadas, $ganador);
+    }else{
+        echo "\n"."El jugador ". strtolower($nombre). " no ganó ningún juego"."\n";
+    }
+}
+
+
+/**
+ * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
+ * @param array $historialJuegos
+ */
+function ganadoSimboloElegido($historialJuegos)     //Punto 4 del menu
+{
+    //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, $totVictorias, string $clave, $simboloElegido
+    $simboloElegido = eligeSimbolo ();
+    $totVictorias = partidasGanadas ($historialJuegos);
+    if ($simboloElegido == CRUZ) { 
+        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+        $porcentaje = ($victorias * 100) /$totVictorias;
+        echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n";
+    }else {
+        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+        $porcentaje = ($victorias * 100) /$totVictorias;
+        echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n";
+    }
+}
+
+
+/**
+ * Muestra el resumen de las partidas del jugador ingresado
+ * @param array $listaJuegos
+ */
+function resumenJugador($listaJuegos)               //Punto 5 del menu
+{
+    //int $acumGanados, $acumPerdidos, $acumEmpatados, $acumPtos, $datos
+    //bool $encontro, array $infoJugador, $partida, string $simbolo, $cruzOCirculo, $nombre, $clave, $separador
+    $acumGanados = 0;
+    $acumPerdidos = 0;
+    $acumEmpatados = 0;
+    $acumPtos = 0;
+    $cruzOCirculo = "";
+    $encontro = false;
+    echo "Ingrese su nombre: "."\n";
+    $nombre = trim(fgets(STDIN));
+    $infoJugador = ["nombre"=>" ",
+                    "juegosGanados"=> 0,
+                    "juegosPerdidos"=> 0,
+                    "juegosEmpatados"=> 0,
+                    "puntosAcumulados"=>0];
+    do{
+        foreach ($listaJuegos as $partida){         //En listaJuegos busca el indice cero y guarda todos los datos de la partida
+            foreach ($partida as $clave => $datos){ //Por cada clave guarda el nombre de esa clave y el dato que esta asociado 
+                if (strtoupper($nombre) == strtoupper($datos)){ //Revisa si el nombre de la partida coincide al ingresado
+                    $cruzOCirculo = $clave;         //Guarda si es X ó O
+                    $encontro = true;               //Guarda si encontro al menos 1 partida
+                }            
+                if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos > 1){            //Consulta si jugo como X ó O, y si gano
+                    $acumGanados= $acumGanados +1;
+                    $acumPtos = $acumPtos + $datos;
+                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 1){ //Consulta si jugo como X ó O, y si empato
+                        $acumEmpatados = $acumEmpatados +1;
+                        $acumPtos = $acumPtos + $datos;
+                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 0){ //Consulta si jugo como X ó O, y si perdió
+                        $acumPerdidos = $acumPerdidos +1;
+                    }
+                if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos > 1){      //Consulta si jugo como X ó O, y si gano
+                    $acumGanados= $acumGanados +1;
+                    $acumPtos = $acumPtos + $datos;
+                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 1){   //Consulta si jugo como X ó O, y si empato
+                        $acumEmpatados = $acumEmpatados +1;
+                        $acumPtos = $acumPtos + $datos;
+                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 0){   //Consulta si jugo como X ó O, y si perdió
+                        $acumPerdidos = $acumPerdidos +1;
+                }
+            }
+            $cruzOCirculo = "";     //Borra si fue cruz o circulo para seguir buscando en la siguiente partida y que no se genere un bucle
+        }
+    if(!$encontro){                 //Si no encuentra el jugador, vuelve a pedir otro nombre
+        echo "\n"."El jugador ingresado no jugó nunca, por favor ingrese otro nombre"."\n";
+        $nombre = trim(fgets(STDIN));
+    }
+    }while(!$encontro);               //Si encontró el jugador, devuelve el resultado por pantalla
+        $infoJugador["nombre"] = strtolower($nombre);
+        $infoJugador["juegosGanados"] = $acumGanados;
+        $infoJugador["juegosPerdidos"] = $acumPerdidos;
+        $infoJugador["juegosEmpatados"] = $acumEmpatados;
+        $infoJugador["puntosAcumulados"] = $acumPtos;
+        $separador = "**********************";
+        echo "\n".$separador."\n";
+        echo "Jugador: ".$infoJugador["nombre"]."\n";
+        echo "Ganó: ".$infoJugador["juegosGanados"]."\n";
+        echo "Perdió: ".$infoJugador["juegosPerdidos"]."\n";
+        echo "Empató: ".$infoJugador["juegosEmpatados"]."\n";
+        echo "Total de puntos acumulados: ".$infoJugador["puntosAcumulados"]." puntos"."\n";
+        echo $separador."\n";
+}
+
+
+/**
+ * Muestra por pantalla la lista de juegos ordenadas por el jugador O
+ * @param array $listaJuegos
+ */
+function listaOrdCirc($listaJuegos)                 //Punto 6 del menu
+{
+    uasort($listaJuegos, "ordenarJugador");
+    print_r($listaJuegos);
+}
+
+
+/**************************************/
+/*****  FUNCIONES SECUNDARIAS  ********/
 /**************************************/
 
 
@@ -90,28 +255,6 @@ function cargarJuego($partidasCargadas)
 
 
 /**
- * Este módulo muestra por pantalla el menú y retorna la opción elegida por el usuario
- * @return int $menu
- */
-function seleccionarOpcion()
-{
-    // int $menu
-    echo "\n"."MENU DE OPCIONES"."\n";
-    echo "1) Jugar al tateti"."\n";
-    echo "2) Mostrar un juego"."\n";
-    echo "3) Mostrar el primer juego ganado del jugador"."\n";
-    echo "4) Mostrar porcentaje de juegos ganados"."\n";
-    echo "5) Mostrar resumen del jugador"."\n";
-    echo "6) Mostrar listado de juegos ordenado por el jugador O"."\n";
-    echo "7) Salir"."\n";
-    echo "Opcion: ";
-    $menu = trim(fgets(STDIN));
-    echo "\n";
-    return $menu;
-}
-
-
-/**
  * @param array $arrayPartida
  * @param int $numeroPartida
  * @return string $resultado
@@ -129,7 +272,7 @@ function resultadoJuego($arrayPartida, $numeroPartida)
     }
     return $resultado;
 }
-     
+ 
 
 /** 
  * Función que muestra las estadísticas de cada juego
@@ -149,41 +292,6 @@ function estadisticasPartida($partida, $numPartida)
     echo $separador."\n"; 
 }
 
-
-/**
- * Este módulo solicita un número y muestra por pantalla los datos del juego
- * @param array $datos
- */
-function mostrarJuego($datos)
-{
-    // int $numJuego, $max, $min, $numJuego
-    $max = count($datos);
-    $min = 1;
-    echo "Ingrese el número del juego que desea visualizar: ";
-    $numJuego = solicitarNumeroEntre($min, $max);
-    estadisticasPartida ($datos, $numJuego);
-}
-
-
-/**
- * Éste módulo muestra la primer victoria del jugador que lo solicita. Si no tiene muestra que no ganó
- * @param array $partidasGuardadas
- */
-function primerVictoriaJugador($partidasGuardadas)
-{
-//int $i, $dimension
-    //string $nombre, int $ganador
-    $i=0;
-    $dimension = count($partidasGuardadas);
-    echo "Ingrese el nombre del jugador: ";
-    $nombre = strtoupper(trim(fgets(STDIN)));
-    $ganador = retornaIndiceGanador($nombre, $partidasGuardadas);
-    if($ganador > -1) {
-    estadisticasPartida ($partidasGuardadas, $ganador);
-    }else{
-        echo "\n"."El jugador ". strtolower($nombre). " no ganó ningún juego"."\n";
-    }
-}
 
 /**
  * Retorna el índice de la primer victoria según el nombre ingresado
@@ -211,6 +319,7 @@ function retornaIndiceGanador($jugador, $coleccion)
     return $indiceGanador;
 }
 
+
 /**
  * Verifica si el símbolo ingresado es X ó O.
  * @return string $simbolo
@@ -226,6 +335,7 @@ function eligeSimbolo()
     } 
     return $simbolo;  
 }
+
 
 /**
  * Toma el array de juegos y le agrega los nuevos juegos
@@ -263,27 +373,6 @@ function partidasGanadas($partidasGral)
 
 
 /**
- * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
- * @param array $historialJuegos
- */
-function ganadoSimboloElegido($historialJuegos)
-{
-    //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, $totVictorias, string $clave, $simboloElegido
-    $simboloElegido = eligeSimbolo ();
-    $totVictorias = partidasGanadas ($historialJuegos);
-    if ($simboloElegido == CRUZ) { 
-        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
-        $porcentaje = ($victorias * 100) /$totVictorias;
-        echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n";
-    }else {
-        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
-        $porcentaje = ($victorias * 100) /$totVictorias;
-        echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n";
-    }
-}
-
-
-/**
  * El jugador elige el símbolo y retorna la cantidad de victorias del mismo
  * @param array $totPartidas
  * @param string $simbolo
@@ -309,87 +398,6 @@ function ganadoSimbolo ($totPartidas, $simbolo)
 
 
 /**
- * Muestra el resumen de las partidas del jugador ingresado
- * @param array $listaJuegos
- */
-function resumenJugador($listaJuegos)
-{
-    //int $acumGanados, $acumPerdidos, $acumEmpatados, $acumPtos, $datos
-    //bool $encontro, array $infoJugador, $partida, string $simbolo, $cruzOCirculo, $nombre, $clave, $separador
-    $acumGanados = 0;
-    $acumPerdidos = 0;
-    $acumEmpatados = 0;
-    $acumPtos = 0;
-    $cruzOCirculo = "";
-    $encontro = false;
-    echo "Ingrese su nombre: "."\n";
-    $nombre = trim(fgets(STDIN));
-    $infoJugador = ["nombre"=>" ",
-                    "juegosGanados"=> 0,
-                    "juegosPerdidos"=> 0,
-                    "juegosEmpatados"=> 0,
-                    "puntosAcumulados"=>0];
-    do{
-        foreach ($listaJuegos as $partida){         //En listaJuegos busca el indice cero y guarda todos los datos de la partida
-            foreach ($partida as $clave => $datos){ //Por cada clave guarda el nombre de esa clave y el dato que esta asociado 
-                if (strtoupper($nombre) == strtoupper($datos)){ //Revisa si el nombre de la partida coincide al ingresado
-                    $cruzOCirculo = $clave;         //Guarda si es X ó O
-                    $encontro = true;               //Guarda si encontro al menos 1 partida
-                }            
-                if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos > 1){            //Consulta si jugo como X ó O, y si gano
-                    $acumGanados= $acumGanados +1;
-                    $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 1){ //Consulta si jugo como X ó O, y si empato
-                        $acumEmpatados = $acumEmpatados +1;
-                        $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCruz" && $clave == "puntosCruz" && $datos == 0){ //Consulta si jugo como X ó O, y si perdió
-                        $acumPerdidos = $acumPerdidos +1;
-                    }
-                if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos > 1){      //Consulta si jugo como X ó O, y si gano
-                    $acumGanados= $acumGanados +1;
-                    $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 1){   //Consulta si jugo como X ó O, y si empato
-                        $acumEmpatados = $acumEmpatados +1;
-                        $acumPtos = $acumPtos + $datos;
-                    }else if ($cruzOCirculo == "jugadorCirculo" && $clave == "puntosCirculo" && $datos == 0){   //Consulta si jugo como X ó O, y si perdió
-                        $acumPerdidos = $acumPerdidos +1;
-                }
-            }
-            $cruzOCirculo = "";     //Borra si fue cruz o circulo para seguir buscando en la siguiente partida y que no se genere un bucle
-        }
-    if(!$encontro){                 //Si no encuentra el jugador, vuelve a pedir otro nombre
-        echo "\n"."El jugador ingresado no jugó nunca, por favor ingrese otro nombre"."\n";
-        $nombre = trim(fgets(STDIN));
-    }
-    }while(!$encontro);               //Si encontró el jugador, devuelve el resultado por pantalla
-        $infoJugador["nombre"] = strtolower($nombre);
-        $infoJugador["juegosGanados"] = $acumGanados;
-        $infoJugador["juegosPerdidos"] = $acumPerdidos;
-        $infoJugador["juegosEmpatados"] = $acumEmpatados;
-        $infoJugador["puntosAcumulados"] = $acumPtos;
-        $separador = "**********************";
-        echo "\n".$separador."\n";
-        echo "Jugador: ".$infoJugador["nombre"]."\n";
-        echo "Ganó: ".$infoJugador["juegosGanados"]."\n";
-        echo "Perdió: ".$infoJugador["juegosPerdidos"]."\n";
-        echo "Empató: ".$infoJugador["juegosEmpatados"]."\n";
-        echo "Total de puntos acumulados: ".$infoJugador["puntosAcumulados"]." puntos"."\n";
-        echo $separador."\n";
-}
-
-
-/**
- * Muestra por pantalla la lista de juegos ordenadas por el jugador O
- * @param array $listaJuegos
- */
-function listaOrdCirc($listaJuegos)
-{
-    uasort($listaJuegos, "ordenarJugador");
-    print_r($listaJuegos);
-}
-
-
-/**
  * Ordena el array por nombre de jugador cuyo simbolo es O
  * @param array $a
  * @param array $b
@@ -399,6 +407,7 @@ function ordenarJugador($a, $b)
 {
     return strcmp($a["jugadorCirculo"], $b["jugadorCirculo"]);
 }
+
 
 /**************************************/
 /*********** PROGRAMA PRINCIPAL *******/
