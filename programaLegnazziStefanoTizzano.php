@@ -255,6 +255,7 @@ function cargarJuego($partidasCargadas)
 
 
 /**
+ * Este módulo recibe como entrada las partidas guardadas y el número de partida y retorna si ganó CÍRCULO/CRUZ o si empataron.
  * @param array $arrayPartida
  * @param int $numeroPartida
  * @return string $resultado
@@ -328,7 +329,7 @@ function eligeSimbolo()
 {
     //string $simbolo
     echo "Ingrese un símbolo X ó O"."\n";
-    $simbolo = strtoupper(trim(fgets(STDIN))); //Ingresa el simbolo y es forzado a quedar en mayusuculas para comparación
+    $simbolo = strtoupper(trim(fgets(STDIN))); //Ingresa el símbolo y es forzado a quedar en mayúsuculas para comparación
     while ($simbolo <> CRUZ && $simbolo <> CIRCULO){
         echo "El símbolo ".$simbolo. " no está permitido, por favor ingrese X ó O"."\n";
         $simbolo = strtoupper(trim(fgets(STDIN))); 
@@ -398,7 +399,7 @@ function ganadoSimbolo ($totPartidas, $simbolo)
 
 
 /**
- * Ordena el array por nombre de jugador cuyo simbolo es O
+ * Ordena el array por nombre de jugador cuyo símbolo es O
  * @param array $a
  * @param array $b
  * @return array strcmp($a["jugadorCruz"], $b["jugadorCruz"])
@@ -462,7 +463,7 @@ switch ($menu) { //según lo visto en clase, switch es una instrucción de estru
         
 
     default: 
-        echo "El número que ingreso no es valido, por favor ingrese un número del 1 al 7"."\n"."\n";
+        echo "El número que ingreso no es válido, por favor ingrese un número del 1 al 7"."\n"."\n";
         $menu = seleccionarOpcion();
     break;
     }
