@@ -42,34 +42,34 @@ function seleccionarOpcion()
 
 /**
  * Este módulo solicita un número y muestra por pantalla los datos del juego
- * @param array $datos
+ * @param array $listaJuegos
  */
-function mostrarJuego($datos)                       //Punto 2 del menu
+function mostrarJuego($listaJuegos)                       //Punto 2 del menu
 {
     // int $numJuego, $max, $min, $numJuego
-    $max = count($datos);
+    $max = count($listaJuegos);
     $min = 1;
     echo "Ingrese el número del juego que desea visualizar: ";
     $numJuego = solicitarNumeroEntre($min, $max);
-    estadisticasPartida ($datos, $numJuego);
+    estadisticasPartida ($listaJuegos, $numJuego);
 }
 
 
 /**
  * Éste módulo muestra la primer victoria del jugador que lo solicita. Si no tiene muestra que no ganó
- * @param array $partidasGuardadas
+ * @param array $listaJuegos
  */
-function primerVictoriaJugador($partidasGuardadas)  //Punto 3 del menu
+function primerVictoriaJugador($listaJuegos)  //Punto 3 del menu
 {
 //int $i, $dimension
     //string $nombre, int $ganador
     $i=0;
-    $dimension = count($partidasGuardadas);
+    $dimension = count($listaJuegos);
     echo "Ingrese el nombre del jugador: ";
     $nombre = strtoupper(trim(fgets(STDIN)));
-    $ganador = retornaIndiceGanador($nombre, $partidasGuardadas);
+    $ganador = retornaIndiceGanador($nombre, $listaJuegos);
     if($ganador > -1) {
-    estadisticasPartida ($partidasGuardadas, $ganador);
+    estadisticasPartida ($listaJuegos, $ganador);
     }else{
         echo "\n"."El jugador ". strtolower($nombre). " no ganó ningún juego"."\n";
     }
@@ -78,19 +78,19 @@ function primerVictoriaJugador($partidasGuardadas)  //Punto 3 del menu
 
 /**
  * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
- * @param array $historialJuegos
+ * @param array $listaJuegos
  */
-function ganadoSimboloElegido($historialJuegos)     //Punto 4 del menú
+function ganadoSimboloElegido($listaJuegos)     //Punto 4 del menú
 {
     //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, $totVictorias, string $clave, $simboloElegido
     $simboloElegido = eligeSimbolo ();
-    $totVictorias = partidasGanadas ($historialJuegos);
+    $totVictorias = partidasGanadas ($listaJuegos);
     if ($simboloElegido == CRUZ) { 
-        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+        $victorias = ganadoSimbolo($listaJuegos, $simboloElegido);
         $porcentaje = ($victorias * 100) /$totVictorias;
         echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n";
     }else {
-        $victorias = ganadoSimbolo($historialJuegos, $simboloElegido);
+        $victorias = ganadoSimbolo($listaJuegos, $simboloElegido);
         $porcentaje = ($victorias * 100) /$totVictorias;
         echo "\n"."El porcentaje de victorias del símbolo ".$simboloElegido. " es ".$porcentaje."%". "\n";
     }
@@ -200,17 +200,17 @@ function cargarJuego($coleccionJuegos)
 
 /**
  * Este módulo recibe como entrada las partidas guardadas y el número de partida y retorna si ganó CÍRCULO/CRUZ o si empataron.
- * @param array $arrayPartida
+ * @param array $listaJuegos
  * @param int $numeroPartida
  * @return string
  */
-function resultadoJuego($arrayPartida, $numeroPartida)
+function resultadoJuego($listaJuegos, $numeroPartida)
 {
     //string $resultado, array $arrayPartida
     $numeroPartida = $numeroPartida - 1; 
-    if ($arrayPartida[$numeroPartida]["puntosCruz"] < $arrayPartida[$numeroPartida]["puntosCirculo"]){
+    if ($listaJuegos[$numeroPartida]["puntosCruz"] < $listaJuegos[$numeroPartida]["puntosCirculo"]){
         $resultado = "Ganó: " . CIRCULO;
-    } elseif ($arrayPartida[$numeroPartida]["puntosCruz"] > $arrayPartida[$numeroPartida]["puntosCirculo"]){
+    } elseif ($listaJuegos[$numeroPartida]["puntosCruz"] > $listaJuegos[$numeroPartida]["puntosCirculo"]){
         $resultado = "Ganó: " . CRUZ;
     } else {
         $resultado = "Empate";
@@ -221,19 +221,19 @@ function resultadoJuego($arrayPartida, $numeroPartida)
 
 /** 
  * Función que muestra las estadísticas de cada juego
- * @param array $partida 
+ * @param array $coleccionJuegos 
  * @param int $numPartida
  */
-function estadisticasPartida($partida, $numPartida)
+function estadisticasPartida($coleccionJuegos, $numPartida)
 {
     // string $separador, $resultado
-    $resultado = resultadoJuego($partida, $numPartida);
+    $resultado = resultadoJuego($coleccionJuegos, $numPartida);
     $separador = "**************************************";
     $numPartida = $numPartida -1; 
     echo "\n".$separador."\n";
     echo "Juego TATETI: ".($numPartida+1)."($resultado)"."\n";
-    echo "Jugador X: ".$partida[$numPartida]["jugadorCruz"]." obtuvo ".$partida[$numPartida]["puntosCruz"]." puntos"."\n";
-    echo "Jugador O: ".$partida[$numPartida]["jugadorCirculo"]." obtuvo ".$partida[$numPartida]["puntosCirculo"]." puntos"."\n";
+    echo "Jugador X: ".$coleccionJuegos[$numPartida]["jugadorCruz"]." obtuvo ".$coleccionJuegos[$numPartida]["puntosCruz"]." puntos"."\n";
+    echo "Jugador O: ".$coleccionJuegos[$numPartida]["jugadorCirculo"]." obtuvo ".$coleccionJuegos[$numPartida]["puntosCirculo"]." puntos"."\n";
     echo $separador."\n"; 
 }
 
@@ -244,18 +244,18 @@ function estadisticasPartida($partida, $numPartida)
  * @param array $coleccion
  * @return int
  */
-function retornaIndiceGanador($jugador, $coleccion)
+function retornaIndiceGanador($jugador, $coleccionJuegos)
 {
-    //int $i, $dimension, $indiceGanador, bool $jugadorEncontrado, array $coleccion
+    //int $i, $dimension, $indiceGanador, bool $jugadorEncontrado
     $i=0;
     $jugadorEncontrado = false;
     $indiceGanador = -1;
-    $dimension = count($coleccion);
+    $dimension = count($coleccionJuegos);
     while (!$jugadorEncontrado && $dimension > $i ) {
-      if ($jugador == strtoupper($coleccion[$i]["jugadorCruz"]) && $coleccion[$i]["puntosCruz"] > 1){
+      if ($jugador == strtoupper($coleccionJuegos[$i]["jugadorCruz"]) && $coleccionJuegos[$i]["puntosCruz"] > 1){
         $jugadorEncontrado = true;
         $indiceGanador = $i+1;
-      }else if($jugador == strtoupper($coleccion[$i]["jugadorCirculo"]) && $coleccion[$i]["puntosCirculo"] > 1){
+      }else if($jugador == strtoupper($coleccionJuegos[$i]["jugadorCirculo"]) && $coleccionJuegos[$i]["puntosCirculo"] > 1){
         $jugadorEncontrado = true;
         $indiceGanador = $i+1;
       }
@@ -284,28 +284,28 @@ function eligeSimbolo()
 
 /**
  * Toma el array de juegos y le agrega los nuevos juegos
- * @param array $coleccionJuegos
+ * @param array $listaJuegos
  * @param array $nuevoJuego
  * @return array
  */
-function agregarJuego($coleccionJuegos, $nuevoJuego)
+function agregarJuego($listaJuegos, $nuevoJuego)
 {
     // int $dimension, array $coleccionJuegos
-    array_push($coleccionJuegos, $nuevoJuego);
-    return $coleccionJuegos;
+    array_push($listaJuegos, $nuevoJuego);
+    return $listaJuegos;
 }
 
 
 /**
  * Le ingresa el array de las partidas guardadas y retorna la cantidad de victorias
- * @param array $partidasGral
+ * @param array $coleccionJuegos
  * @return int 
  */
 function partidasGanadas($coleccionJuegos)
 {
     //int $acumPartGanadas, $datos, array $partidaGuard, string $clave
     $acumPartGanadas = 0;
-    foreach ($partidasGral as $partidaGuard){
+    foreach ($coleccionJuegos as $partidaGuard){
         foreach ($partidaGuard as $clave => $datos){
             if (("puntosCruz" == $clave || "puntosCirculo" == $clave)&&($datos > 1)){
                 $acumPartGanadas = $acumPartGanadas +1;
@@ -318,11 +318,11 @@ function partidasGanadas($coleccionJuegos)
 
 /**
  * El jugador elige el símbolo y retorna la cantidad de victorias del mismo
- * @param array $totPartidas
+ * @param array $coleccionJuegos
  * @param string $simbolo
  * @return int
  */
-function ganadoSimbolo ($totPartidas, $simbolo)
+function ganadoSimbolo ($coleccionJuegos, $simbolo)
 {   
     //string $ptoSimbolos, $clave, int $datos, $acumVictorias, array $partidaGuard
     $acumVictorias = 0;
@@ -331,7 +331,7 @@ function ganadoSimbolo ($totPartidas, $simbolo)
     }else {
         $ptoSimbolos = "puntosCirculo";
     }
-    foreach ($totPartidas as $partidaGuard){
+    foreach ($coleccionJuegos as $partidaGuard){
         foreach ($partidaGuard as $clave => $datos)
         if ($ptoSimbolos == $clave && $datos > 1){
             $acumVictorias = $acumVictorias +1;            
@@ -343,17 +343,17 @@ function ganadoSimbolo ($totPartidas, $simbolo)
 
 /**
  * Este modulo recorre la coleccion de juegos y guarda los indice de las partidas encontradas en un array
- * @param array $historialJuegos
+ * @param array $coleccionJuegos
  * @param string $jugador
  */
-function buscarJugador($historialJuegos, $jugador)
+function buscarJugador($coleccionJuegos, $jugador)
 {
     /* 
     */
     $encontro = false;
     $partidasJugador = [];
     $i = 0;
-    foreach ($historialJuegos as $partida){         
+    foreach ($coleccionJuegos as $partida){         
         foreach ($partida as $clave => $datos){ 
             if (strtoupper($jugador) == strtoupper($datos)){
                 array_push($partidasJugador, $i);
@@ -363,7 +363,7 @@ function buscarJugador($historialJuegos, $jugador)
             $i = $i + 1;
         }
         if($encontro){
-            acumEstadisticas($historialJuegos, $jugador, $partidasJugador);
+            acumEstadisticas($coleccionJuegos, $jugador, $partidasJugador);
         }else{
             echo "\n"."El jugador ".$jugador." no existe."."\n";
         }
@@ -404,14 +404,14 @@ function acumEstadisticas($listaJuegos, $nombre, $partidasJugadas)
 
 /**
  * Este modulo determina si es cruz o circulo
- * @param array $historialJuegos
+ * @param array $coleccionJuegos
  * @param int $indice
  * @param string $jugador
  * @return boolean
  */
-function cruzOCirculo($historialJuegos, $indice, $jugador) 
+function cruzOCirculo($coleccionJuegos, $indice, $jugador) 
 {
-    if(strtoupper($historialJuegos[$indice]["jugadorCruz"]) == strtoupper($jugador)){
+    if(strtoupper($coleccionJuegos[$indice]["jugadorCruz"]) == strtoupper($jugador)){
         $esCruz = true;
     }else {
         $esCruz = false;
@@ -422,28 +422,28 @@ function cruzOCirculo($historialJuegos, $indice, $jugador)
 
 /**
  * Este modulo determina si gana, empata, pierde
- * @param array $historialJuegos
+ * @param array $coleccionJuegos
  * @param int $indice
  * @param boolean $esX
  * @return int 
  */
-function ganaPierdeEmp($historialJuegos, $indice, $esX)
+function ganaPierdeEmp($coleccionJuegos, $indice, $esX)
 {
     $puntos = 0;
     if($esX == true){
-            if($historialJuegos[$indice]["puntosCruz"] > 1){
-                $puntos = $historialJuegos[$indice]["puntosCruz"];
-            }elseif ($historialJuegos[$indice]["puntosCruz"] == 1){
+            if($coleccionJuegos[$indice]["puntosCruz"] > 1){
+                $puntos = $coleccionJuegos[$indice]["puntosCruz"];
+            }elseif ($coleccionJuegos[$indice]["puntosCruz"] == 1){
                 $puntos = 1;
-            } elseif($historialJuegos[$indice]["puntosCruz"] == 0){
+            } elseif($coleccionJuegos[$indice]["puntosCruz"] == 0){
                 $puntos = 0;
             }
     }else{
-        if($historialJuegos[$indice]["puntosCirculo"] > 1){
-            $puntos = $historialJuegos[$indice]["puntosCirculo"];
-        }elseif ($historialJuegos[$indice]["puntosCirculo"] == 1){
+        if($coleccionJuegos[$indice]["puntosCirculo"] > 1){
+            $puntos = $coleccionJuegos[$indice]["puntosCirculo"];
+        }elseif ($coleccionJuegos[$indice]["puntosCirculo"] == 1){
             $puntos = 1;
-        } elseif($historialJuegos[$indice]["puntosCirculo"] == 0){
+        } elseif($coleccionJuegos[$indice]["puntosCirculo"] == 0){
             $puntos = 0;
         }
 }
