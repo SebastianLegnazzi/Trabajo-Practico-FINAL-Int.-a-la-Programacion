@@ -1,5 +1,6 @@
 <?php
 
+
 include_once("tateti.php");
 
 
@@ -44,7 +45,7 @@ function seleccionarOpcion()
  * Este módulo solicita un número y muestra por pantalla los datos del juego
  * @param array $listaJuegos
  */
-function mostrarJuego($listaJuegos)                       //Punto 2 del menu
+function mostrarJuego($listaJuegos)                  //Punto 2 del menu
 {
     // int $numJuego, $max, $min, $numJuego
     $max = count($listaJuegos);
@@ -59,10 +60,9 @@ function mostrarJuego($listaJuegos)                       //Punto 2 del menu
  * Éste módulo muestra la primer victoria del jugador que lo solicita. Si no tiene muestra que no ganó
  * @param array $listaJuegos
  */
-function primerVictoriaJugador($listaJuegos)  //Punto 3 del menu
+function primerVictoriaJugador($listaJuegos)        //Punto 3 del menu
 {
-//int $i, $dimension
-    //string $nombre, int $ganador
+//int $i, $dimension,  $ganador, string $nombre
     $i=0;
     $dimension = count($listaJuegos);
     echo "Ingrese el nombre del jugador: ";
@@ -80,7 +80,7 @@ function primerVictoriaJugador($listaJuegos)  //Punto 3 del menu
  * El jugador elige el símbolo y muestra el porcentaje de juegos ganados
  * @param array $listaJuegos
  */
-function ganadoSimboloElegido($listaJuegos)     //Punto 4 del menú
+function ganadoSimboloElegido($listaJuegos)         //Punto 4 del menú
 {
     //int $acumVicTot , $victorias, $datos, float $porcentaje, array $partidaGuard, $totVictorias, string $clave, $simboloElegido
     $simboloElegido = eligeSimbolo ();
@@ -98,12 +98,12 @@ function ganadoSimboloElegido($listaJuegos)     //Punto 4 del menú
 
 
 /**
- * Este modulo tiene como entrada la lista de juegos y le solicita un nombre de usuario para usarlo en la invocacion al modulo
+ * Este modulo tiene como entrada la lista de juegos y le solicita un nombre de usuario para usarlo en la invocación al modulo
  * @param array $listaJuegos
  */
 function resumenJugador($listaJuegos)               //Punto 5 del menú
 {
-    /* */
+    //string $nombre
     echo "Ingrese su nombre: "."\n";
     $nombre = trim(fgets(STDIN));
     buscarJugador($listaJuegos, $nombre);
@@ -111,7 +111,7 @@ function resumenJugador($listaJuegos)               //Punto 5 del menú
 
 
 /**
- * Muestra por pantalla la lista de juegos ordenadas por el jugador O
+ * Muestra por pantalla la lista de juegos ordenada por el jugador O(Círculo)
  * @param array $listaJuegos
  */
 function listaOrdCirc($listaJuegos)                 //Punto 6 del menu
@@ -128,7 +128,7 @@ function listaOrdCirc($listaJuegos)                 //Punto 6 del menu
 
 /**
  * Esta función carga ejemplos de juegos 
- * @param array $partidasCargadas
+ * @param array $coleccionJuegos
  * @return array 
  */
 function cargarJuego($coleccionJuegos)
@@ -241,7 +241,7 @@ function estadisticasPartida($coleccionJuegos, $numPartida)
 /**
  * Retorna el índice de la primer victoria según el nombre ingresado
  * @param string $jugador
- * @param array $coleccion
+ * @param array $coleccionJuegos
  * @return int
  */
 function retornaIndiceGanador($jugador, $coleccionJuegos)
@@ -283,7 +283,7 @@ function eligeSimbolo()
 
 
 /**
- * Toma el array de juegos y le agrega los nuevos juegos
+ * Toma el array de juegos y le agrega los juegos nuevos
  * @param array $listaJuegos
  * @param array $nuevoJuego
  * @return array
@@ -342,14 +342,13 @@ function ganadoSimbolo ($coleccionJuegos, $simbolo)
 
 
 /**
- * Este modulo recorre la coleccion de juegos y guarda los indice de las partidas encontradas en un array
+ * Este módulo recorre la colección de juegos y guarda los índices de las partidas encontradas en un array
  * @param array $coleccionJuegos
  * @param string $jugador
  */
 function buscarJugador($coleccionJuegos, $jugador)
 {
-    /* 
-    */
+    //boolean $encontro, array $partidasJugador, int $i, string $datos
     $encontro = false;
     $partidasJugador = [];
     $i = 0;
@@ -369,16 +368,16 @@ function buscarJugador($coleccionJuegos, $jugador)
         }
 }
 
+
 /**
- * Este modulo acumula las estadisticas del jugador
+ * Este módulo acumula las estadísticas del jugador
  * @param array $listaJuegos
  * @param string $nombre
  * @param array $partidasJugadas
  */
 function acumEstadisticas($listaJuegos, $nombre, $partidasJugadas)
 {
-    /* 
-    */
+    //array $estadisticaJugador, int $ptos, $i, boolean $simboloCruz 
     $estadisticaJugador = ["nombre"=> $nombre,
                     "juegosGanados"=> 0,
                     "juegosPerdidos"=> 0,
@@ -403,7 +402,7 @@ function acumEstadisticas($listaJuegos, $nombre, $partidasJugadas)
 
 
 /**
- * Este modulo determina si es cruz o circulo
+ * Este módulo determina si es cruz o círculo
  * @param array $coleccionJuegos
  * @param int $indice
  * @param string $jugador
@@ -411,6 +410,7 @@ function acumEstadisticas($listaJuegos, $nombre, $partidasJugadas)
  */
 function cruzOCirculo($coleccionJuegos, $indice, $jugador) 
 {
+    //boolean $esCruz
     if(strtoupper($coleccionJuegos[$indice]["jugadorCruz"]) == strtoupper($jugador)){
         $esCruz = true;
     }else {
@@ -421,7 +421,7 @@ function cruzOCirculo($coleccionJuegos, $indice, $jugador)
 
 
 /**
- * Este modulo determina si gana, empata, pierde
+ * Este módulo determina si gana, empata o pierde
  * @param array $coleccionJuegos
  * @param int $indice
  * @param boolean $esX
@@ -429,6 +429,7 @@ function cruzOCirculo($coleccionJuegos, $indice, $jugador)
  */
 function ganaPierdeEmp($coleccionJuegos, $indice, $esX)
 {
+    //int $puntos,
     $puntos = 0;
     if($esX == true){
             if($coleccionJuegos[$indice]["puntosCruz"] > 1){
@@ -446,9 +447,10 @@ function ganaPierdeEmp($coleccionJuegos, $indice, $esX)
         } elseif($coleccionJuegos[$indice]["puntosCirculo"] == 0){
             $puntos = 0;
         }
-}
+    }
     return $puntos;
 }
+
 
 /**
  * Muestra por pantalla las estadísticas del jugador
@@ -456,14 +458,15 @@ function ganaPierdeEmp($coleccionJuegos, $indice, $esX)
  */
 function pantallaResumen($histJugador)
 {
-        $separador = "**********************";
-        echo "\n".$separador."\n";
-        echo "Jugador: ".$histJugador["nombre"]."\n";
-        echo "Ganó: ".$histJugador["juegosGanados"]."\n";
-        echo "Perdió: ".$histJugador["juegosPerdidos"]."\n";
-        echo "Empató: ".$histJugador["juegosEmpatados"]."\n";
-        echo "Total de puntos acumulados: ".$histJugador["puntosAcumulados"]." puntos"."\n";
-        echo $separador."\n";
+    //string $separador
+    $separador = "**********************";
+    echo "\n".$separador."\n";
+    echo "Jugador: ".$histJugador["nombre"]."\n";
+    echo "Ganó: ".$histJugador["juegosGanados"]."\n";
+    echo "Perdió: ".$histJugador["juegosPerdidos"]."\n";
+    echo "Empató: ".$histJugador["juegosEmpatados"]."\n";
+    echo "Total de puntos acumulados: ".$histJugador["puntosAcumulados"]." puntos"."\n";
+    echo $separador."\n";
 }
 
 
@@ -485,14 +488,13 @@ function ordenarJugador($a, $b)
 /**************************************/
 
 
-//Inicialización de variables:
+//array $partidaNueva, $datosJuego, int $menu
 $partidaNueva = [];
 $datosJuego = [];
-//Proceso:
 $datosJuego = cargarJuego($datosJuego);
 $menu = seleccionarOpcion();
 do {
-switch ($menu) { //según lo visto en clase, switch es una instrucción de estructura de control alternativa, ya que, es similar a la instrucción IF
+switch ($menu) { //Según lo visto en clase, switch es una instrucción de estructura de control alternativa, ya que, es similar a la instrucción IF
     
     case 1: 
         $partidaNueva = jugar();
@@ -533,7 +535,7 @@ switch ($menu) { //según lo visto en clase, switch es una instrucción de estru
         
 
     default: 
-        echo "El número que ingreso no es válido, por favor ingrese un número del 1 al 7"."\n"."\n";
+        echo "El número que ingresó no es válido, por favor ingrese un número del 1 al 7"."\n"."\n";
         $menu = seleccionarOpcion();
     break;
     }
