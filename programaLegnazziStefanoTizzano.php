@@ -42,16 +42,16 @@ function seleccionarOpcion()
 
 
 /**
- * Este módulo solicita un número y muestra por pantalla los datos del juego
+ * Este módulo solicita un número de partida al usuario y envía los datos a la función que muestra por pantalla las estadísticas
  * @param array $listaJuegos
  */
 function mostrarJuego($listaJuegos)                  //Punto 2 del menu
 {
-    // int $numJuego, $max, $min, $numJuego
-    $max = count($listaJuegos);
-    $min = 1;
+    // int $numJuego, $maximo, $minimo, $numJuego
+    $maximo = count($listaJuegos);
+    $minimo = 1;
     echo "Ingrese el número del juego que desea visualizar: ";
-    $numJuego = solicitarNumeroEntre($min, $max);
+    $numJuego = solicitarNumeroEntre($minimo, $maximo);
     estadisticasPartida ($listaJuegos, $numJuego);
 }
 
@@ -62,9 +62,7 @@ function mostrarJuego($listaJuegos)                  //Punto 2 del menu
  */
 function primerVictoriaJugador($listaJuegos)        //Punto 3 del menu
 {
-//int $i, $dimension,  $ganador, string $nombre
-    $i=0;
-    $dimension = count($listaJuegos);
+//int $ganador, string $nombre
     echo "Ingrese el nombre del jugador: ";
     $nombre = strtoupper(trim(fgets(STDIN)));
     $ganador = retornaIndiceGanador($nombre, $listaJuegos);
@@ -111,7 +109,7 @@ function resumenJugador($listaJuegos)               //Punto 5 del menú
 
 
 /**
- * Muestra por pantalla la lista de juegos ordenada por el jugador O(Círculo)
+ * Muestra por pantalla la lista de juegos ordenada alfabéticamente por el jugador CÍRCULO
  * @param array $listaJuegos
  */
 function listaOrdCirc($listaJuegos)                 //Punto 6 del menu
@@ -127,11 +125,10 @@ function listaOrdCirc($listaJuegos)                 //Punto 6 del menu
 
 
 /**
- * Esta función carga ejemplos de juegos 
- * @param array $coleccionJuegos
+ * Función que contiene un array con las partidas de ejemplo
  * @return array 
  */
-function cargarJuego($coleccionJuegos)
+function cargarJuego()
 {
     //array $partidasCargadas
     $partidasCargadas[0] = [
@@ -206,8 +203,7 @@ function cargarJuego($coleccionJuegos)
  */
 function resultadoJuego($listaJuegos, $numeroPartida)
 {
-    //string $resultado, array $arrayPartida
-    $numeroPartida = $numeroPartida - 1; 
+    //string $resultado, array $arrayPartida 
     if ($listaJuegos[$numeroPartida]["puntosCruz"] < $listaJuegos[$numeroPartida]["puntosCirculo"]){
         $resultado = "Ganó: " . CIRCULO;
     } elseif ($listaJuegos[$numeroPartida]["puntosCruz"] > $listaJuegos[$numeroPartida]["puntosCirculo"]){
@@ -220,16 +216,16 @@ function resultadoJuego($listaJuegos, $numeroPartida)
  
 
 /** 
- * Función que muestra las estadísticas de cada juego
+ * Función que muestra por pantalla las estadísticas juego que ingresa el usuario
  * @param array $coleccionJuegos 
  * @param int $numPartida
  */
 function estadisticasPartida($coleccionJuegos, $numPartida)
 {
     // string $separador, $resultado
+    $numPartida = $numPartida -1; 
     $resultado = resultadoJuego($coleccionJuegos, $numPartida);
     $separador = "**************************************";
-    $numPartida = $numPartida -1; 
     echo "\n".$separador."\n";
     echo "Juego TATETI: ".($numPartida+1)."($resultado)"."\n";
     echo "Jugador X: ".$coleccionJuegos[$numPartida]["jugadorCruz"]." obtuvo ".$coleccionJuegos[$numPartida]["puntosCruz"]." puntos"."\n";
@@ -474,7 +470,7 @@ function pantallaResumen($histJugador)
  * Ordena el array por nombre de jugador cuyo símbolo es O
  * @param array $a
  * @param array $b
- * @return array 
+ * @return array //Retorna la lista de todos los juegos ordenada alfabeticamente por los nombres del jugador circulo
  */
 function ordenarJugador($a, $b)
 {
@@ -491,7 +487,7 @@ function ordenarJugador($a, $b)
 //array $partidaNueva, $datosJuego, int $menu
 $partidaNueva = [];
 $datosJuego = [];
-$datosJuego = cargarJuego($datosJuego);
+$datosJuego = cargarJuego();
 $menu = seleccionarOpcion();
 do {
 switch ($menu) { //Según lo visto en clase, switch es una instrucción de estructura de control alternativa, ya que, es similar a la instrucción IF
