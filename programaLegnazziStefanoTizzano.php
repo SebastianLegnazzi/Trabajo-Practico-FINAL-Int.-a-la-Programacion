@@ -65,11 +65,16 @@ function primerVictoriaJugador($listaJuegos)        //Punto 3 del menu
 //int $ganador, string $nombre
     echo "Ingrese el nombre del jugador: ";
     $nombre = strtoupper(trim(fgets(STDIN)));
+    $jugadorEncontrado = existeJugador($listaJuegos, $nombre);
+    if($jugadorEncontrado){
     $ganador = retornaIndiceGanador($nombre, $listaJuegos);
     if($ganador > -1) {
     estadisticasPartida ($listaJuegos, $ganador);
     }else{
         echo "\n"."El jugador ". strtolower($nombre). " no ganó ningún juego"."\n";
+    }
+    }else{
+        echo "\n"."El jugador ". strtolower($nombre). " no existe"."\n";
     }
 }
 
@@ -191,6 +196,19 @@ function cargarJuego()
         "puntosCruz" => 0,
         "puntosCirculo" => 4
     ];
+    $partidasCargadas = [];
+    $jg1 = ["jugadorCruz" => "AMARILIS", "jugadorCirculo" => "MILOS",    "puntosCruz" => 1, "puntosCirculo" => 1];
+    $jg2 = ["jugadorCruz" => "ZENDA",    "jugadorCirculo" => "AMARILIS", "puntosCruz" => 3, "puntosCirculo" => 0];
+    $jg3 = ["jugadorCruz" => "ZENDA",    "jugadorCirculo" => "MILOS",    "puntosCruz" => 0, "puntosCirculo" => 4];
+    $jg4 = ["jugadorCruz" => "CALIXTO",  "jugadorCirculo" => "TRUMAN",   "puntosCruz" => 1, "puntosCirculo" => 1];
+    $jg5 = ["jugadorCruz" => "AMARILIS", "jugadorCirculo" => "MILOS",    "puntosCruz" => 5, "puntosCirculo" => 0];
+    $jg6 = ["jugadorCruz" => "FEDORA",   "jugadorCirculo" => "CALIXTO",  "puntosCruz" => 0, "puntosCirculo" => 3];
+    $jg7 = ["jugadorCruz" => "TRUMAN",   "jugadorCirculo" => "AMARILIS", "puntosCruz" => 4, "puntosCirculo" => 0];
+    $jg8 = ["jugadorCruz" => "CALIXTO",  "jugadorCirculo" => "TRUMAN",   "puntosCruz" => 1, "puntosCirculo" => 1];
+    $jg9 = ["jugadorCruz" => "TRUMAN",   "jugadorCirculo" => "FEDORA",   "puntosCruz" => 2, "puntosCirculo" => 0];
+    $jg10= ["jugadorCruz" => "MILOS",    "jugadorCirculo" => "ZENDA",   "puntosCruz" => 1, "puntosCirculo" => 1];
+array_push($partidasCargadas, $jg1, $jg2, $jg3, $jg4, $jg5, $jg6, $jg7, $jg8, $jg9, $jg10);
+
     return $partidasCargadas;
 }
 
@@ -478,6 +496,28 @@ function ordenarJugador($a, $b)
     return strcmp($a["jugadorCirculo"], $b["jugadorCirculo"]);
 }
 
+
+/**
+ * Este módulo recorre la colección de juegos y guarda los índices de las partidas encontradas en un array
+ * @param array $coleccionJuegos
+ * @param string $jugador
+ */
+function existeJugador($coleccionJuegos, $jugador)
+{
+    //boolean $encontro, int $i, $dimension, string $datos
+    $encontro = false;
+    $i = 0;
+    $dimension = count($coleccionJuegos);
+    while(!$encontro && $dimension > $i){
+            if ($coleccionJuegos[$i]["jugadorCruz"] == $jugador){
+                $encontro = true;
+            }else if ($coleccionJuegos[$i]["jugadorCirculo"] == $jugador){
+                $encontro = true;
+            }
+            $i = $i + 1;
+        }
+        return $encontro;
+}
 
 /**************************************/
 /*********** PROGRAMA PRINCIPAL *******/
