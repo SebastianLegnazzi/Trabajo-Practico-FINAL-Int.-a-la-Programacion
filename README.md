@@ -4,7 +4,7 @@
 - **AÑO:** 1º
 - **CUATRIMESTRE:** 1º
 - **CARRERA:** Tecnicatura Universitaria en Desarrollo Web
-- **MATERIA:** Introducción a la programación Orientada a Objetos
+- **MATERIA:** Introduccion a la Programacion
 - **NOTA:** :white_check_mark: 10 :white_check_mark:
 ## Datos del grupo
 - Stefano Franco Dante - FAI-2750 - franco.stefano@est.fi.uncoma.edu.ar - [GitHub](https://github.com/francoDanteStefano)
